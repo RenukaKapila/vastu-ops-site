@@ -1,0 +1,125 @@
+.admin-page::before {
+  opacity: 0.08;
+}
+
+.admin-shell {
+  padding: 28px 0 48px;
+}
+
+.admin-header {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  padding: clamp(22px, 4vw, 34px);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.admin-header h1,
+.admin-card h2 {
+  font-size: clamp(2rem, 4vw, 3.7rem);
+}
+
+.admin-card {
+  margin-top: 22px;
+}
+
+.admin-form,
+.admin-toolbar,
+.record-update,
+.record-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.grid-form,
+.admin-toolbar,
+.record-update,
+.record-grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.admin-form label,
+.admin-toolbar label,
+.record-update label {
+  display: grid;
+  gap: 7px;
+  font-weight: 900;
+  color: var(--deep-plum);
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+.records-list {
+  display: grid;
+  gap: 18px;
+  margin-top: 22px;
+}
+
+.record-card {
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 22px;
+  background: var(--surface);
+  box-shadow: 0 18px 55px rgba(140, 74, 50, 0.12);
+}
+
+.record-head {
+  display: flex;
+  gap: 14px;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 16px;
+}
+
+.record-head h3,
+.record-head p,
+.record-grid p,
+.record-message {
+  margin-bottom: 0;
+}
+
+.record-head span {
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: rgba(232, 197, 106, 0.42);
+  color: var(--deep-plum);
+  font-weight: 900;
+}
+
+.record-grid {
+  margin: 14px 0;
+}
+
+.record-message {
+  border-left: 4px solid var(--sunrise-gold);
+  padding-left: 12px;
+  margin: 14px 0;
+}
+
+@media (max-width: 760px) {
+  .admin-header,
+  .record-head {
+    display: block;
+  }
+
+  .admin-header button {
+    margin-top: 14px;
+  }
+
+  .grid-form,
+  .admin-toolbar,
+  .record-update,
+  .record-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .full {
+    grid-column: auto;
+  }
+}

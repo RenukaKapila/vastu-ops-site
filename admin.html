@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vastu Ops Admin</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body class="admin-page">
+  <main class="admin-shell">
+    <section class="admin-header">
+      <div>
+        <p class="eyebrow">Private Admin</p>
+        <h1>Lead Records</h1>
+        <p>Search inquiries, add notes, schedule consultations, and create records.</p>
+      </div>
+      <button id="logoutButton" class="button ghost" type="button" hidden>Sign Out</button>
+    </section>
+
+    <section id="loginPanel" class="card admin-card">
+      <h2>Sign In</h2>
+      <form id="loginForm" class="admin-form">
+        <label>
+          <span>Email</span>
+          <input name="email" type="email" autocomplete="email" required />
+        </label>
+        <label>
+          <span>Password</span>
+          <input name="password" type="password" autocomplete="current-password" required />
+        </label>
+        <button class="button primary" type="submit">Sign In</button>
+        <p id="loginStatus" class="form-status" role="status"></p>
+      </form>
+    </section>
+
+    <section id="adminPanel" hidden>
+      <section class="card admin-card">
+        <div class="admin-toolbar">
+          <label>
+            <span>Search</span>
+            <input id="searchInput" placeholder="Name, phone, email, service, status" />
+          </label>
+          <button id="refreshButton" class="button ghost" type="button">Refresh</button>
+        </div>
+        <p id="adminStatus" class="form-status" role="status"></p>
+      </section>
+
+      <section class="card admin-card">
+        <h2>Create Record</h2>
+        <form id="createForm" class="admin-form grid-form">
+          <label>
+            <span>Full Name</span>
+            <input name="full_name" required />
+          </label>
+          <label>
+            <span>Phone</span>
+            <input name="phone" required />
+          </label>
+          <label>
+            <span>Email</span>
+            <input name="email" type="email" />
+          </label>
+          <label>
+            <span>Service</span>
+            <select name="service_interested_in" required>
+              <option>Vastu</option>
+              <option>Numerology</option>
+              <option>Remedies</option>
+            </select>
+          </label>
+          <label>
+            <span>Visit Type</span>
+            <select name="consultation_type" required>
+              <option value="in-person">In Person</option>
+              <option value="online">Online</option>
+            </select>
+          </label>
+          <label>
+            <span>Schedule</span>
+            <input name="scheduled_for" type="datetime-local" />
+          </label>
+          <label class="full">
+            <span>Message</span>
+            <textarea name="message" rows="3"></textarea>
+          </label>
+          <button class="button primary full" type="submit">Create Record</button>
+        </form>
+      </section>
+
+      <section class="records-shell">
+        <div id="recordsList" class="records-list"></div>
+      </section>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

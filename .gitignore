@@ -1,0 +1,12 @@
+.env
+.env.*
+secrets/
+customer-records/
+*.sqlite
+*.sqlite3
+*.db
+*.log
+__pycache__/
+node_modules/
+dist/
+build/
