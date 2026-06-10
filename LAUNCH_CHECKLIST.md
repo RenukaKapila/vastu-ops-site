@@ -1,10 +1,10 @@
 # Launch Checklist
 
-Use this before sharing Vastu Ops publicly.
+Use this before sharing Vastu Numerology Guide publicly.
 
 ## Built
 
-- Public Vastu Ops website.
+- Public Vastu Numerology Guide website.
 - Branding: Krantik Sanghrash with Krant.
 - Vastu marked as in-person only.
 - Numerology marked as online available for $100.

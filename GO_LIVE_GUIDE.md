@@ -1,4 +1,4 @@
-# Vastu Ops Go-Live Guide
+# Vastu Numerology Guide Go-Live Guide
 
 This is the simple launch guide for Renuka and Krant.
 

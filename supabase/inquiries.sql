@@ -21,10 +21,10 @@ create table if not exists public.inquiries (
   updated_at timestamptz not null default now(),
   constraint inquiries_full_name_required check (length(trim(full_name)) > 0),
   constraint inquiries_phone_required check (length(trim(phone)) > 0),
-  constraint inquiries_service_allowed check (service_interested_in in ('Vastu', 'Numerology', 'Remedies')),
+  constraint inquiries_service_allowed check (service_interested_in in ('Vastu', 'Numerology', 'Remedies', 'Vastu + Numerology')),
   constraint inquiries_consultation_type_allowed check (consultation_type in ('in-person', 'online')),
   constraint inquiries_vastu_in_person_only check (
-    service_interested_in <> 'Vastu' or consultation_type = 'in-person'
+    service_interested_in not in ('Vastu', 'Vastu + Numerology') or consultation_type = 'in-person'
   ),
   constraint inquiries_status_allowed check (status in ('new', 'contacted', 'booked', 'closed'))
 );
@@ -39,6 +39,14 @@ grant select, insert, update on public.inquiries to authenticated;
 alter table public.inquiries add column if not exists scheduled_for timestamptz;
 alter table public.inquiries add column if not exists admin_notes text not null default '';
 alter table public.inquiries add column if not exists updated_at timestamptz not null default now();
+
+alter table public.inquiries drop constraint if exists inquiries_service_allowed;
+alter table public.inquiries add constraint inquiries_service_allowed
+check (service_interested_in in ('Vastu', 'Numerology', 'Remedies', 'Vastu + Numerology'));
+
+alter table public.inquiries drop constraint if exists inquiries_vastu_in_person_only;
+alter table public.inquiries add constraint inquiries_vastu_in_person_only
+check (service_interested_in not in ('Vastu', 'Vastu + Numerology') or consultation_type = 'in-person');
 
 create table if not exists public.admin_users (
   user_id uuid primary key references auth.users(id) on delete cascade,
@@ -75,9 +83,9 @@ to anon
 with check (
   length(trim(full_name)) > 0
   and length(trim(phone)) > 0
-  and service_interested_in in ('Vastu', 'Numerology', 'Remedies')
+  and service_interested_in in ('Vastu', 'Numerology', 'Remedies', 'Vastu + Numerology')
   and consultation_type in ('in-person', 'online')
-  and (service_interested_in <> 'Vastu' or consultation_type = 'in-person')
+  and (service_interested_in not in ('Vastu', 'Vastu + Numerology') or consultation_type = 'in-person')
 );
 
 drop policy if exists "Allow approved admins to read inquiries" on public.inquiries;

@@ -4,7 +4,8 @@ const SUPABASE_ANON_KEY = window.VNG_SUPABASE_ANON_KEY || "";
 const serviceTypeMap = {
   Vastu: "in-person",
   Numerology: "online",
-  Remedies: "in-person"
+  Remedies: "in-person",
+  "Vastu + Numerology": "in-person"
 };
 
 const chaldeanGroups = {
@@ -82,12 +83,12 @@ function syncConsultationType() {
   const selected = service.value;
   const requiredType = serviceTypeMap[selected];
 
-  if (selected === "Vastu") {
+  if (selected === "Vastu" || selected === "Vastu + Numerology") {
     type.value = "in-person";
     [...type.options].forEach((option) => {
       option.disabled = option.value !== "in-person";
     });
-    note.textContent = "Vastu requires at least one in-person visit.";
+    note.textContent = "Vastu requires at least one in-person visit. Numerology may be completed online.";
     return;
   }
 
@@ -99,7 +100,7 @@ function syncConsultationType() {
     type.value = requiredType;
   }
   note.textContent = selected === "Numerology"
-    ? "Numerology is available online for $100."
+    ? "Numerology is available online for $150."
     : "Remedies are guided by the consultation.";
 }
 
@@ -133,7 +134,7 @@ function setupInquiryForm() {
       return;
     }
 
-    if (payload.service_interested_in === "Vastu" && payload.consultation_type !== "in-person") {
+    if ((payload.service_interested_in === "Vastu" || payload.service_interested_in === "Vastu + Numerology") && payload.consultation_type !== "in-person") {
       status.textContent = "Vastu must be in person.";
       return;
     }

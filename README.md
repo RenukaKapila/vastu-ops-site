@@ -1,6 +1,6 @@
-# Vastu Ops
+# Vastu Numerology Guide
 
-Launch folder for the Vastu Ops public website and optional free inquiry storage.
+Launch folder for the Vastu Numerology Guide public website and optional free inquiry storage.
 
 ## Structure
 

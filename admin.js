@@ -179,7 +179,7 @@ async function createRecord(event) {
   const service = String(data.get("service_interested_in") || "");
   const visitType = String(data.get("consultation_type") || "");
 
-  if (service === "Vastu" && visitType !== "in-person") {
+  if ((service === "Vastu" || service === "Vastu + Numerology") && visitType !== "in-person") {
     setStatus("Vastu records must be in person.");
     state.creating = false;
     if (submitButton) {
