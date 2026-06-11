@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://renukakapila.github.io/vastu-ops-site/sitemap.xml
+Sitemap: https://vastunumerologyguide.com/sitemap.xml

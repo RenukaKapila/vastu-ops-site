@@ -6,8 +6,8 @@ This is the simple launch guide for Renuka and Krant.
 
 After GitHub Pages is live:
 
-- Public website: `https://renukakapila.github.io/vastu-ops-site/`
-- Private admin: `https://renukakapila.github.io/vastu-ops-site/admin.html`
+- Public website: [VastuNumerologyGuide.com](https://vastunumerologyguide.com/)
+- Private admin: [VastuNumerologyGuide.com/admin.html](https://vastunumerologyguide.com/admin.html)
 
 Save both links as browser bookmarks.
 

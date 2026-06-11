@@ -6,7 +6,7 @@ Customer website for Vastu Numerology Guide, led by Krant with booking support f
 
 Live public website:
 
-[https://renukakapila.github.io/vastu-ops-site/](https://renukakapila.github.io/vastu-ops-site/)
+[VastuNumerologyGuide.com](https://vastunumerologyguide.com/)
 
 ## What This Site Does
 
@@ -72,7 +72,7 @@ window.VNG_SUPABASE_ANON_KEY = "your-public-publishable-key";
 
 The admin page is:
 
-[https://renukakapila.github.io/vastu-ops-site/admin.html](https://renukakapila.github.io/vastu-ops-site/admin.html)
+[VastuNumerologyGuide.com/admin.html](https://vastunumerologyguide.com/admin.html)
 
 Only approved Supabase Auth users listed in `public.admin_users` should be able to access inquiry records.
 
@@ -101,12 +101,11 @@ Before sharing the site widely:
 7. Check the homepage on a phone.
 8. Confirm no secrets, passwords, or customer records are committed.
 
-## Domain Later
+## Domain
 
-When a custom domain is purchased, connect it in GitHub Pages settings and then update:
+The public domain should be displayed to people as `VastuNumerologyGuide.com`.
 
-- `README.md`
-- `sitemap.xml`
-- `robots.txt`
-- canonical and social links in `index.html`
+Keep technical URLs lowercase in website files:
 
+- `https://vastunumerologyguide.com/`
+- `https://vastunumerologyguide.com/admin.html`
