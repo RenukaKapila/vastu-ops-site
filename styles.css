@@ -162,12 +162,6 @@ main {
   pointer-events: none;
 }
 
-.brand-art-panel img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
 .eyebrow {
   margin: 0 0 12px;
   color: var(--rose-copper);
@@ -338,38 +332,6 @@ button.primary,
 .trust-panel h2 {
   max-width: 920px;
   font-size: clamp(1.8rem, 3.6vw, 3.4rem);
-}
-
-.meet-grid {
-  display: grid;
-  grid-template-columns: 1fr 280px;
-  gap: 26px;
-  align-items: center;
-}
-
-.photo-placeholder,
-.brand-art-panel {
-  min-height: 280px;
-  border: 1px dashed rgba(161, 89, 59, 0.44);
-  border-radius: 24px;
-  display: grid;
-  place-items: center;
-  background:
-    linear-gradient(145deg, rgba(255, 247, 236, 0.62), rgba(248, 231, 192, 0.72)),
-    radial-gradient(circle at 50% 32%, rgba(232, 197, 106, 0.25), transparent 40%);
-  color: var(--warm-brown);
-  font-weight: 900;
-  text-align: center;
-}
-
-.brand-art-panel {
-  border-style: solid;
-  padding: 18px;
-  overflow: hidden;
-}
-
-.brand-art-panel img {
-  border-radius: 18px;
 }
 
 .guide-grid,
@@ -783,15 +745,6 @@ textarea {
   .process-grid-four,
   .booking-form {
     grid-template-columns: 1fr;
-  }
-
-  .meet-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .photo-placeholder,
-  .brand-art-panel {
-    min-height: 200px;
   }
 
   .booking-form .full {
