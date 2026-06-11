@@ -21,7 +21,7 @@ Live public website:
 - Brand: Vastu Numerology Guide
 - Consultant: Krant
 - Manager and booking support: Renuka
-- Service area: Arlington and the Dallas Metroplex
+- Service area: Arlington and the Dallas-Fort Worth Metroplex
 - Online Numerology Consultation: `$150`
 - In-Person Vastu Visit: `$300`
 - Vastu + Numerology Combined Guidance: custom quote
