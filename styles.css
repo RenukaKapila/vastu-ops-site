@@ -192,9 +192,11 @@ h3 {
 }
 
 h1 {
-  max-width: 760px;
-  font-size: clamp(2.8rem, 6.4vw, 5.8rem);
+  max-width: 900px;
+  font-size: clamp(2.45rem, 5.2vw, 5.1rem);
   margin-bottom: 18px;
+  overflow-wrap: break-word;
+  text-wrap: balance;
 }
 
 h2 {
