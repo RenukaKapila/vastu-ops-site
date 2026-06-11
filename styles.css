@@ -118,10 +118,8 @@ main {
 
 .hero-shell {
   min-height: 72vh;
-  display: grid;
-  grid-template-columns: minmax(0, 0.94fr) minmax(320px, 0.76fr);
+  display: flex;
   align-items: center;
-  gap: 28px;
   padding: 54px 0 24px;
 }
 
@@ -162,27 +160,10 @@ main {
   pointer-events: none;
 }
 
-.hero-media {
-  margin: 0;
-  border: 1px solid var(--line);
-  border-radius: 30px;
-  overflow: hidden;
-  background: rgba(255, 247, 236, 0.72);
-  box-shadow: var(--shadow);
-}
-
-.hero-media img,
-.brand-banner img,
 .brand-art-panel img {
   display: block;
   width: 100%;
   height: auto;
-}
-
-.hero-media img {
-  min-height: 420px;
-  object-fit: cover;
-  object-position: center;
 }
 
 .eyebrow {
@@ -357,16 +338,6 @@ button.primary,
 
 .brand-art-panel img {
   border-radius: 18px;
-}
-
-.brand-banner {
-  margin: 26px 0;
-  overflow: hidden;
-  padding: 0;
-}
-
-.brand-banner img {
-  object-fit: cover;
 }
 
 .guide-grid,
@@ -742,14 +713,6 @@ textarea {
 
   .brand span {
     font-size: 0.92rem;
-  }
-
-  .hero-media {
-    margin-top: 18px;
-  }
-
-  .hero-media img {
-    min-height: 0;
   }
 
   .identity-strip,
