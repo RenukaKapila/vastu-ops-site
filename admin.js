@@ -7,7 +7,7 @@ const state = {
   creating: false
 };
 
-const statusOptions = ["new", "contacted", "booked", "closed"];
+const statusOptions = ["new", "contacted", "booked", "closed", "archived"];
 
 function $(id) {
   return document.getElementById(id);
@@ -82,7 +82,7 @@ function renderRecords() {
           <h3>${escapeHtml(record.full_name)}</h3>
           <p>${escapeHtml(record.phone)}${record.email ? " | " + escapeHtml(record.email) : ""}</p>
         </div>
-        <span>${escapeHtml(record.status)}</span>
+        <span class="${record.status === "archived" ? "archived-badge" : ""}">${escapeHtml(record.status)}</span>
       </div>
 
       <div class="record-grid">
@@ -109,7 +109,11 @@ function renderRecords() {
           <span>Notes</span>
           <textarea name="admin_notes" rows="3">${escapeHtml(record.admin_notes)}</textarea>
         </label>
-        <button class="button primary full" type="submit">Save Record</button>
+        <div class="record-actions full">
+          <button class="button primary" type="submit">Save Record</button>
+          <button class="button ghost archive-record" type="button">Archive</button>
+          <button class="button danger delete-record" type="button">Delete</button>
+        </div>
       </form>
     </article>
   `).join("");
@@ -118,6 +122,18 @@ function renderRecords() {
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       await updateRecord(form.closest(".record-card").dataset.id, new FormData(form));
+    });
+  });
+
+  document.querySelectorAll(".archive-record").forEach((button) => {
+    button.addEventListener("click", async () => {
+      await archiveRecord(button.closest(".record-card").dataset.id);
+    });
+  });
+
+  document.querySelectorAll(".delete-record").forEach((button) => {
+    button.addEventListener("click", async () => {
+      await deleteRecord(button.closest(".record-card").dataset.id);
     });
   });
 }
@@ -160,6 +176,47 @@ async function updateRecord(id, formData) {
   }
 
   setStatus("Record saved.");
+  await loadRecords();
+}
+
+async function archiveRecord(id) {
+  const client = requireClient();
+  const { error } = await client
+    .from("inquiries")
+    .update({
+      status: "archived",
+      updated_at: new Date().toISOString()
+    })
+    .eq("id", id);
+
+  if (error) {
+    setStatus(error.message || "Could not archive record.");
+    return;
+  }
+
+  setStatus("Record archived.");
+  await loadRecords();
+}
+
+async function deleteRecord(id) {
+  const record = state.records.find((item) => item.id === id);
+  const name = record?.full_name || "this record";
+  const confirmed = window.confirm(`Delete ${name}? This permanently removes the record.`);
+
+  if (!confirmed) return;
+
+  const client = requireClient();
+  const { error } = await client
+    .from("inquiries")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    setStatus(error.message || "Could not delete record. Confirm the Supabase delete policy has been updated.");
+    return;
+  }
+
+  setStatus("Record deleted.");
   await loadRecords();
 }
 

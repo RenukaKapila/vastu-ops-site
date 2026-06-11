@@ -92,6 +92,11 @@
   font-weight: 900;
 }
 
+.record-head .archived-badge {
+  background: rgba(110, 66, 56, 0.16);
+  color: var(--muted);
+}
+
 .record-grid {
   margin: 14px 0;
 }
@@ -100,6 +105,22 @@
   border-left: 4px solid var(--sunrise-gold);
   padding-left: 12px;
   margin: 14px 0;
+}
+
+.record-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.record-actions .button {
+  flex: 1 1 160px;
+}
+
+.button.danger {
+  background: #7b2424;
+  color: var(--sunrise-ivory);
+  box-shadow: 0 18px 46px rgba(123, 36, 36, 0.18);
 }
 
 @media (max-width: 760px) {

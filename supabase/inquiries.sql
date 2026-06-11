@@ -2,7 +2,7 @@
 -- Security model:
 -- - Anonymous website visitors can insert simple inquiry rows.
 -- - Anonymous users cannot read, update, or delete inquiries.
--- - Approved admins can read, create, schedule, and update inquiry records.
+-- - Approved admins can read, create, schedule, archive, update, and delete inquiry records.
 -- - Never expose a service role key in the public website.
 
 create table if not exists public.inquiries (
@@ -26,7 +26,7 @@ create table if not exists public.inquiries (
   constraint inquiries_vastu_in_person_only check (
     service_interested_in not in ('Vastu', 'Vastu + Numerology') or consultation_type = 'in-person'
   ),
-  constraint inquiries_status_allowed check (status in ('new', 'contacted', 'booked', 'closed'))
+  constraint inquiries_status_allowed check (status in ('new', 'contacted', 'booked', 'closed', 'archived'))
 );
 
 alter table public.inquiries enable row level security;
@@ -34,7 +34,7 @@ alter table public.inquiries enable row level security;
 grant usage on schema public to anon;
 grant usage on schema public to authenticated;
 grant insert on public.inquiries to anon;
-grant select, insert, update on public.inquiries to authenticated;
+grant select, insert, update, delete on public.inquiries to authenticated;
 
 alter table public.inquiries add column if not exists scheduled_for timestamptz;
 alter table public.inquiries add column if not exists admin_notes text not null default '';
@@ -47,6 +47,10 @@ check (service_interested_in in ('Vastu', 'Numerology', 'Remedies', 'Vastu + Num
 alter table public.inquiries drop constraint if exists inquiries_vastu_in_person_only;
 alter table public.inquiries add constraint inquiries_vastu_in_person_only
 check (service_interested_in not in ('Vastu', 'Vastu + Numerology') or consultation_type = 'in-person');
+
+alter table public.inquiries drop constraint if exists inquiries_status_allowed;
+alter table public.inquiries add constraint inquiries_status_allowed
+check (status in ('new', 'contacted', 'booked', 'closed', 'archived'));
 
 create table if not exists public.admin_users (
   user_id uuid primary key references auth.users(id) on delete cascade,
@@ -110,6 +114,13 @@ to authenticated
 using (public.is_vastu_ops_admin())
 with check (public.is_vastu_ops_admin());
 
+drop policy if exists "Allow approved admins to delete inquiries" on public.inquiries;
+create policy "Allow approved admins to delete inquiries"
+on public.inquiries
+for delete
+to authenticated
+using (public.is_vastu_ops_admin());
+
 drop policy if exists "Allow admins to read admin users" on public.admin_users;
 create policy "Allow admins to read admin users"
 on public.admin_users
@@ -119,4 +130,4 @@ using (public.is_vastu_ops_admin() or user_id = auth.uid());
 
 -- No select/update/delete policies are created for anon users.
 -- With Row Level Security enabled, this prevents public reads and edits.
--- No delete policy is created for admins; use status updates instead of deleting records.
+-- Delete is limited to approved logged-in admins only.
