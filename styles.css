@@ -611,6 +611,12 @@ textarea {
   text-align: center;
 }
 
+.footer-contact {
+  margin: 8px auto 12px;
+  font-weight: 900;
+  color: var(--warm-brown);
+}
+
 .thank-you-shell {
   min-height: 68vh;
   display: flex;
