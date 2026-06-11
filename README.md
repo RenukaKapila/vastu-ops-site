@@ -1,59 +1,82 @@
 # Vastu Numerology Guide
 
-Launch folder for the Vastu Numerology Guide public website and optional free inquiry storage.
+Customer website for Vastu Numerology Guide, led by Krant with booking support from Renuka.
 
-## Structure
+## Open The Website
 
-- Root website files are the GitHub Pages customer website.
-- `supabase/` contains optional Supabase Free Plan SQL for inquiry storage.
+Live public website:
+
+[https://renukakapila.github.io/vastu-ops-site/](https://renukakapila.github.io/vastu-ops-site/)
+
+## What This Site Does
+
+- Introduces Vastu, Numerology, and personalized remedy guidance.
+- Helps customers understand which consultation may fit their needs.
+- Lets customers send a consultation request.
+- Stores inquiry records securely in Supabase when configured.
+- Provides a private admin page for approved users to review, search, schedule, and update inquiries.
 
 ## Public Details
 
-- Public branding: Krantik Sanghrash with Krant
-- Short name: Krant
-- Manager: Renuka
-- Krant text/WhatsApp: 469-975-7385, text only
-- Renuka call/WhatsApp: 469-659-3734
-- Vastu: in-person only, at least one visit required
-- Numerology: online available, $100
-- In-person guide: $300
+- Brand: Vastu Numerology Guide
+- Consultant: Krant
+- Manager and booking support: Renuka
+- Service area: Arlington and the Dallas Metroplex
+- Online Numerology Consultation: `$150`
+- In-Person Vastu Visit: `$300`
+- Vastu + Numerology Combined Guidance: custom quote
 
-## Safety Rules
+## Project Files
 
-Do not commit:
+- `index.html` is the public customer website.
+- `styles.css` controls the public website design.
+- `app.js` handles the customer inquiry form and WhatsApp links.
+- `admin.html` is the private admin page. It is not linked from the public website navigation.
+- `admin.css` and `admin.js` power the private admin tools.
+- `config.js` holds the public Supabase URL and publishable key only.
+- `supabase/inquiries.sql` sets up the inquiry database, security rules, and admin access table.
 
-- `.env`
+## Safe Setup Notes
+
+Do not commit or publish private information such as:
+
+- `.env` files
 - `secrets/`
 - Telegram tokens
 - Supabase service role keys
 - customer records
 - SQLite database files
-- passwords or password plaintext
+- admin passwords
 
-The public website may use a Supabase anon key only after Row Level Security is enabled.
-Never put a service role key in `config.js`.
+The public website may use a Supabase publishable or anon key only when Row Level Security is enabled. Never put a Supabase service role key in `config.js`.
 
-## Free Supabase Option
+## Supabase Setup
 
-Preferred no-payment setup:
+Use Supabase only on the free plan unless the business intentionally decides to upgrade later.
 
-1. Create a Supabase project only if it stays on the Free Plan and does not ask for payment information.
-2. In Supabase SQL editor, run `supabase/inquiries.sql`.
+1. Open the Supabase SQL Editor.
+2. Run `supabase/inquiries.sql`.
 3. Confirm Row Level Security is enabled on `public.inquiries`.
-4. Confirm anon users can insert only and cannot read, update, or delete rows.
-5. Copy the project URL and anon key into `config.js`.
+4. Confirm public visitors can insert inquiries only.
+5. Confirm approved admin users can read and update inquiry records after login.
+6. Add the Supabase project URL and public publishable key to `config.js`.
 
-If Supabase asks for billing, a credit card, paid add-ons, or upgrade prompts, stop and use WhatsApp-only booking.
+Example `config.js`:
 
-## Admin Setup
+```javascript
+window.VNG_SUPABASE_URL = "https://your-project.supabase.co";
+window.VNG_SUPABASE_ANON_KEY = "your-public-publishable-key";
+```
 
-The hidden admin page is `admin.html`. It is not linked from the public navigation.
+## Admin Access
 
-1. In Supabase, go to Authentication -> Users.
-2. Create a user for Renuka with email and password.
-3. Create a user for Krant with email and password, if needed.
-4. Copy each user's UUID from the Users table.
-5. In SQL Editor, add approved admins:
+The admin page is:
+
+[https://renukakapila.github.io/vastu-ops-site/admin.html](https://renukakapila.github.io/vastu-ops-site/admin.html)
+
+Only approved Supabase Auth users listed in `public.admin_users` should be able to access inquiry records.
+
+To approve an admin, create the user in Supabase Authentication, copy their user UUID, then add them to `public.admin_users`:
 
 ```sql
 insert into public.admin_users (user_id, display_name, role)
@@ -65,30 +88,25 @@ set display_name = excluded.display_name,
     role = excluded.role;
 ```
 
-Only users listed in `public.admin_users` can read or update inquiry records.
-Do not share admin passwords in GitHub, text messages, or public chat.
+## Launch Checklist
 
-## Public Config
+Before sharing the site widely:
 
-`config.js` should look like this after Supabase is set up:
+1. Confirm the latest GitHub Pages deployment passed.
+2. Open the live public website and submit one test inquiry.
+3. Open the private admin page and confirm the test inquiry appears.
+4. Test search, notes, status updates, and scheduling.
+5. Test WhatsApp buttons on desktop and phone.
+6. Remove or close test records.
+7. Check the homepage on a phone.
+8. Confirm no secrets, passwords, or customer records are committed.
 
-```javascript
-window.VNG_SUPABASE_URL = "https://your-project.supabase.co";
-window.VNG_SUPABASE_ANON_KEY = "your-public-anon-key";
-```
+## Domain Later
 
-Leave both values blank for WhatsApp fallback only.
+When a custom domain is purchased, connect it in GitHub Pages settings and then update:
 
-## Launch Notes
+- `README.md`
+- `sitemap.xml`
+- `robots.txt`
+- canonical and social links in `index.html`
 
-1. Deploy the repo root with GitHub Pages using `.github/workflows/pages.yml`.
-2. Test WhatsApp links.
-3. If Supabase is configured, submit one test inquiry.
-4. Confirm the inquiry appears in the private Supabase dashboard.
-5. Open `admin.html`, sign in, and confirm records load.
-6. Run the visible text audit before launch.
-
-## Spam Protection
-
-Cloudflare Turnstile is a possible future improvement if it can be used completely free with no payment method.
-It is not wired into the current launch because the first priority is a small, safe, no-cost inquiry flow.
