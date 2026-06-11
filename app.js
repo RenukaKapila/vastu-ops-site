@@ -141,9 +141,7 @@ function setupInquiryForm() {
 
     try {
       await saveInquiry(payload);
-      form.reset();
-      syncConsultationType();
-      status.textContent = "Request saved. Renuka will coordinate booking.";
+      window.location.assign("/thank-you.html");
     } catch (error) {
       status.textContent = error.message;
     }

@@ -611,6 +611,48 @@ textarea {
   text-align: center;
 }
 
+.thank-you-shell {
+  min-height: 68vh;
+  display: flex;
+  align-items: center;
+  padding: 54px 0 24px;
+}
+
+.thank-you-card {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 34px;
+  padding: clamp(26px, 5vw, 58px);
+  background:
+    linear-gradient(145deg, rgba(255, 247, 236, 0.9), rgba(248, 231, 192, 0.68)),
+    radial-gradient(circle at 90% 10%, rgba(232, 197, 106, 0.28), transparent 32%);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(20px);
+  position: relative;
+  overflow: hidden;
+}
+
+.thank-you-card::after {
+  content: "";
+  position: absolute;
+  width: min(42vw, 420px);
+  aspect-ratio: 1;
+  right: -120px;
+  bottom: -140px;
+  border-radius: 999px;
+  border: 1px solid var(--sunrise-gold);
+  box-shadow:
+    0 0 0 34px rgba(232, 197, 106, 0.12),
+    0 0 0 72px rgba(161, 89, 59, 0.08),
+    0 0 0 112px rgba(232, 197, 106, 0.08);
+  pointer-events: none;
+}
+
+.thank-you-card > * {
+  position: relative;
+  z-index: 1;
+}
+
 @media (max-width: 860px) {
   .topbar,
   .hero-shell,
