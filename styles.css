@@ -84,6 +84,17 @@ a {
   text-decoration: none;
   font-weight: 900;
   color: var(--deep-plum);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand img {
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  object-fit: cover;
+  box-shadow: 0 6px 18px rgba(140, 74, 50, 0.16);
 }
 
 nav {
@@ -107,8 +118,10 @@ main {
 
 .hero-shell {
   min-height: 72vh;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 0.94fr) minmax(320px, 0.76fr);
   align-items: center;
+  gap: 28px;
   padding: 54px 0 24px;
 }
 
@@ -147,6 +160,29 @@ main {
     0 0 0 72px rgba(161, 89, 59, 0.08),
     0 0 0 112px rgba(232, 197, 106, 0.08);
   pointer-events: none;
+}
+
+.hero-media {
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: 30px;
+  overflow: hidden;
+  background: rgba(255, 247, 236, 0.72);
+  box-shadow: var(--shadow);
+}
+
+.hero-media img,
+.brand-banner img,
+.brand-art-panel img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.hero-media img {
+  min-height: 420px;
+  object-fit: cover;
+  object-position: center;
 }
 
 .eyebrow {
@@ -298,7 +334,8 @@ button.primary,
   align-items: center;
 }
 
-.photo-placeholder {
+.photo-placeholder,
+.brand-art-panel {
   min-height: 280px;
   border: 1px dashed rgba(161, 89, 59, 0.44);
   border-radius: 24px;
@@ -310,6 +347,26 @@ button.primary,
   color: var(--warm-brown);
   font-weight: 900;
   text-align: center;
+}
+
+.brand-art-panel {
+  border-style: solid;
+  padding: 18px;
+  overflow: hidden;
+}
+
+.brand-art-panel img {
+  border-radius: 18px;
+}
+
+.brand-banner {
+  margin: 26px 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+.brand-banner img {
+  object-fit: cover;
 }
 
 .guide-grid,
@@ -659,6 +716,14 @@ textarea {
   z-index: 1;
 }
 
+.thank-you-logo {
+  width: min(180px, 44vw);
+  display: block;
+  margin: 0 0 20px;
+  border-radius: 22px;
+  box-shadow: 0 18px 48px rgba(140, 74, 50, 0.14);
+}
+
 @media (max-width: 860px) {
   .topbar,
   .hero-shell,
@@ -673,6 +738,18 @@ textarea {
 
   .hero-copy {
     margin-bottom: 18px;
+  }
+
+  .brand span {
+    font-size: 0.92rem;
+  }
+
+  .hero-media {
+    margin-top: 18px;
+  }
+
+  .hero-media img {
+    min-height: 0;
   }
 
   .identity-strip,
@@ -695,7 +772,8 @@ textarea {
     grid-template-columns: 1fr;
   }
 
-  .photo-placeholder {
+  .photo-placeholder,
+  .brand-art-panel {
     min-height: 200px;
   }
 
