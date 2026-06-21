@@ -8,6 +8,12 @@ const state = {
 };
 
 const statusOptions = ["new", "contacted", "booked", "closed", "archived"];
+const ADMIN_NETWORK_ERROR = "Could not reach Supabase. Check the Supabase project URL, publishable key, and allowed site settings.";
+
+function adminErrorMessage(error, fallback) {
+  if (error?.message === "Failed to fetch" || error?.name === "TypeError") return ADMIN_NETWORK_ERROR;
+  return error?.message || fallback;
+}
 
 function $(id) {
   return document.getElementById(id);
@@ -141,13 +147,21 @@ function renderRecords() {
 async function loadRecords() {
   const client = requireClient();
   setStatus("Loading records...");
-  const { data, error } = await client
-    .from("inquiries")
-    .select("*")
-    .order("created_at", { ascending: false });
 
+  let result;
+  try {
+    result = await client
+      .from("inquiries")
+      .select("*")
+      .order("created_at", { ascending: false });
+  } catch (error) {
+    setStatus(adminErrorMessage(error, "Could not load records."));
+    return;
+  }
+
+  const { data, error } = result;
   if (error) {
-    setStatus(error.message || "Could not load records.");
+    setStatus(adminErrorMessage(error, "Could not load records."));
     return;
   }
 
@@ -165,13 +179,20 @@ async function updateRecord(id, formData) {
     updated_at: new Date().toISOString()
   };
 
-  const { error } = await client
-    .from("inquiries")
-    .update(payload)
-    .eq("id", id);
+  let result;
+  try {
+    result = await client
+      .from("inquiries")
+      .update(payload)
+      .eq("id", id);
+  } catch (error) {
+    setStatus(adminErrorMessage(error, "Could not save record."));
+    return;
+  }
 
+  const { error } = result;
   if (error) {
-    setStatus(error.message || "Could not save record.");
+    setStatus(adminErrorMessage(error, "Could not save record."));
     return;
   }
 
@@ -181,16 +202,24 @@ async function updateRecord(id, formData) {
 
 async function archiveRecord(id) {
   const client = requireClient();
-  const { error } = await client
-    .from("inquiries")
-    .update({
-      status: "archived",
-      updated_at: new Date().toISOString()
-    })
-    .eq("id", id);
 
+  let result;
+  try {
+    result = await client
+      .from("inquiries")
+      .update({
+        status: "archived",
+        updated_at: new Date().toISOString()
+      })
+      .eq("id", id);
+  } catch (error) {
+    setStatus(adminErrorMessage(error, "Could not archive record."));
+    return;
+  }
+
+  const { error } = result;
   if (error) {
-    setStatus(error.message || "Could not archive record.");
+    setStatus(adminErrorMessage(error, "Could not archive record."));
     return;
   }
 
@@ -206,13 +235,21 @@ async function deleteRecord(id) {
   if (!confirmed) return;
 
   const client = requireClient();
-  const { error } = await client
-    .from("inquiries")
-    .delete()
-    .eq("id", id);
 
+  let result;
+  try {
+    result = await client
+      .from("inquiries")
+      .delete()
+      .eq("id", id);
+  } catch (error) {
+    setStatus(adminErrorMessage(error, "Could not delete record. Confirm the Supabase delete policy has been updated."));
+    return;
+  }
+
+  const { error } = result;
   if (error) {
-    setStatus(error.message || "Could not delete record. Confirm the Supabase delete policy has been updated.");
+    setStatus(adminErrorMessage(error, "Could not delete record. Confirm the Supabase delete policy has been updated."));
     return;
   }
 
@@ -259,9 +296,22 @@ async function createRecord(event) {
     updated_at: new Date().toISOString()
   };
 
-  const { error } = await client.from("inquiries").insert(payload);
+  let result;
+  try {
+    result = await client.from("inquiries").insert(payload);
+  } catch (error) {
+    setStatus(adminErrorMessage(error, "Could not create record."));
+    state.creating = false;
+    if (submitButton) {
+      submitButton.disabled = false;
+      submitButton.textContent = "Create Record";
+    }
+    return;
+  }
+
+  const { error } = result;
   if (error) {
-    setStatus(error.message || "Could not create record.");
+    setStatus(adminErrorMessage(error, "Could not create record."));
     state.creating = false;
     if (submitButton) {
       submitButton.disabled = false;
@@ -282,7 +332,15 @@ async function createRecord(event) {
 
 async function showSession() {
   const client = requireClient();
-  const { data } = await client.auth.getSession();
+
+  let data;
+  try {
+    ({ data } = await client.auth.getSession());
+  } catch (error) {
+    $("loginStatus").textContent = adminErrorMessage(error, "Could not check login session.");
+    return;
+  }
+
   const hasSession = Boolean(data.session);
 
   $("loginPanel").hidden = hasSession;
@@ -307,10 +365,18 @@ function setupAdmin() {
     const data = new FormData(event.currentTarget);
     const email = String(data.get("email") || "").trim();
     const password = String(data.get("password") || "");
-    const { error } = await state.client.auth.signInWithPassword({ email, password });
 
+    let result;
+    try {
+      result = await state.client.auth.signInWithPassword({ email, password });
+    } catch (error) {
+      $("loginStatus").textContent = adminErrorMessage(error, "Login failed.");
+      return;
+    }
+
+    const { error } = result;
     if (error) {
-      $("loginStatus").textContent = error.message || "Login failed.";
+      $("loginStatus").textContent = adminErrorMessage(error, "Login failed.");
       return;
     }
 
