@@ -1,5 +1,6 @@
-const SUPABASE_URL = (window.VNG_SUPABASE_URL || "").replace(/\/$/, "");
+const SUPABASE_URL = (window.VNG_SUPABASE_URL || "").replace(/\/rest\/v1\/?$/, "").replace(/\/$/, "");
 const SUPABASE_ANON_KEY = window.VNG_SUPABASE_ANON_KEY || "";
+const BOOKING_NETWORK_ERROR = "Online saving could not connect. Please contact Renuka on WhatsApp.";
 
 const serviceTypeMap = {
   Vastu: "in-person",
@@ -58,16 +59,21 @@ async function saveInquiry(payload) {
     throw new Error("Online saving is not connected yet. Please use WhatsApp.");
   }
 
-  const response = await fetch(`${supabaseRestUrl()}/inquiries`, {
-    method: "POST",
-    headers: {
-      apikey: SUPABASE_ANON_KEY,
-      Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-      "Content-Type": "application/json",
-      Prefer: "return=minimal"
-    },
-    body: JSON.stringify(payload)
-  });
+  let response;
+  try {
+    response = await fetch(`${supabaseRestUrl()}/inquiries`, {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        "Content-Type": "application/json",
+        Prefer: "return=minimal"
+      },
+      body: JSON.stringify(payload)
+    });
+  } catch {
+    throw new Error(BOOKING_NETWORK_ERROR);
+  }
 
   if (!response.ok) {
     throw new Error("Request could not be saved. Please use WhatsApp.");
