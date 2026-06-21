@@ -54,6 +54,20 @@ function supabaseRestUrl() {
     : `${SUPABASE_URL}/rest/v1`;
 }
 
+function supabaseHeaders() {
+  const headers = {
+    apikey: SUPABASE_ANON_KEY,
+    "Content-Type": "application/json",
+    Prefer: "return=minimal"
+  };
+
+  if (!SUPABASE_ANON_KEY.startsWith("sb_publishable_")) {
+    headers.Authorization = `Bearer ${SUPABASE_ANON_KEY}`;
+  }
+
+  return headers;
+}
+
 async function saveInquiry(payload) {
   if (!isSupabaseReady()) {
     throw new Error("Online saving is not connected yet. Please use WhatsApp.");
@@ -63,12 +77,7 @@ async function saveInquiry(payload) {
   try {
     response = await fetch(`${supabaseRestUrl()}/inquiries`, {
       method: "POST",
-      headers: {
-        apikey: SUPABASE_ANON_KEY,
-        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-        "Content-Type": "application/json",
-        Prefer: "return=minimal"
-      },
+      headers: supabaseHeaders(),
       body: JSON.stringify(payload)
     });
   } catch {
