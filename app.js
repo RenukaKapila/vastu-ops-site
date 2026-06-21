@@ -1,6 +1,7 @@
 const SUPABASE_URL = (window.VNG_SUPABASE_URL || "").replace(/\/rest\/v1\/?$/, "").replace(/\/$/, "");
 const SUPABASE_ANON_KEY = window.VNG_SUPABASE_ANON_KEY || "";
-const BOOKING_NETWORK_ERROR = "Online saving could not connect. Please contact Renuka on WhatsApp.";
+const BOOKING_NETWORK_ERROR = "Online saving could not connect.";
+const RENUKA_WHATSAPP_URL = "https://wa.me/14696593734";
 
 const serviceTypeMap = {
   Vastu: "in-person",
@@ -68,9 +69,35 @@ function supabaseHeaders() {
   return headers;
 }
 
+function bookingFallbackUrl(payload) {
+  const lines = [
+    "Hello Renuka, I would like booking support for Vastu Numerology Guide.",
+    `Name: ${payload.full_name}`,
+    `Phone: ${payload.phone}`,
+    payload.email ? `Email: ${payload.email}` : "",
+    `Service: ${payload.service_interested_in}`,
+    `Visit Type: ${payload.consultation_type}`,
+    payload.preferred_contact_method ? `Preferred Contact: ${payload.preferred_contact_method}` : "",
+    payload.message ? `Message: ${payload.message}` : ""
+  ].filter(Boolean);
+
+  return `${RENUKA_WHATSAPP_URL}?text=${encodeURIComponent(lines.join("\n"))}`;
+}
+
+function showBookingFallback(status, payload, message) {
+  const link = document.createElement("a");
+  link.href = bookingFallbackUrl(payload);
+  link.textContent = "Send details on WhatsApp";
+  link.target = "_blank";
+  link.rel = "noopener";
+
+  status.textContent = `${message} `;
+  status.appendChild(link);
+}
+
 async function saveInquiry(payload) {
   if (!isSupabaseReady()) {
-    throw new Error("Online saving is not connected yet. Please use WhatsApp.");
+    throw new Error("Online saving is not connected yet.");
   }
 
   let response;
@@ -85,7 +112,7 @@ async function saveInquiry(payload) {
   }
 
   if (!response.ok) {
-    throw new Error("Request could not be saved. Please use WhatsApp.");
+    throw new Error("Request could not be saved.");
   }
 }
 
@@ -158,7 +185,7 @@ function setupInquiryForm() {
       await saveInquiry(payload);
       window.location.assign("/thank-you.html");
     } catch (error) {
-      status.textContent = error.message;
+      showBookingFallback(status, payload, error.message);
     }
   });
 }
