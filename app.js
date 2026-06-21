@@ -126,12 +126,18 @@ function syncConsultationType() {
     option.disabled = false;
   });
 
-  if (requiredType) {
+  if (requiredType && selected !== "Numerology") {
     type.value = requiredType;
   }
-  note.textContent = selected === "Numerology"
-    ? "Numerology is available online for $50."
-    : "Remedies are guided by the consultation.";
+
+  if (selected === "Numerology") {
+    note.textContent = type.value === "in-person"
+      ? "In-person Numerology is $100. Online Numerology is available for $50."
+      : "Online Numerology is $50. In-person Numerology is available for $100.";
+    return;
+  }
+
+  note.textContent = "Remedies are guided by the consultation.";
 }
 
 function setupInquiryForm() {
@@ -142,6 +148,7 @@ function setupInquiryForm() {
   if (!form || !status || !service || !type) return;
 
   service.addEventListener("change", syncConsultationType);
+  type.addEventListener("change", syncConsultationType);
   syncConsultationType();
 
   form.addEventListener("submit", async (event) => {
