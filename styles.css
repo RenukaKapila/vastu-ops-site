@@ -174,6 +174,7 @@ main {
 h1,
 h2,
 h3,
+h4,
 p {
   margin-top: 0;
 }
@@ -202,6 +203,14 @@ h2 {
 
 h3 {
   font-size: 1.28rem;
+}
+
+h4 {
+  margin-bottom: 10px;
+  color: var(--deep-plum);
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 p {
@@ -325,8 +334,9 @@ button.primary,
   backdrop-filter: blur(20px);
 }
 
-.section-heading {
-  max-width: 720px;
+.section-heading,
+.section-intro {
+  max-width: 760px;
 }
 
 .trust-panel h2 {
@@ -382,14 +392,16 @@ button.primary,
   margin-bottom: 12px;
 }
 
-.prep-list ul {
+.prep-list ul,
+.service-detail-grid ul {
   margin: 0;
   padding-left: 18px;
   color: var(--muted);
   line-height: 1.8;
 }
 
-.prep-list li + li {
+.prep-list li + li,
+.service-detail-grid li + li {
   margin-top: 4px;
 }
 
@@ -431,6 +443,20 @@ button.primary,
     radial-gradient(circle at 92% 14%, rgba(232, 197, 106, 0.24), transparent 34%);
 }
 
+.service-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 22px;
+}
+
+.service-detail-grid > div {
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 18px;
+  background: rgba(255, 247, 236, 0.58);
+}
+
 .service-pill-grid {
   display: flex;
   flex-wrap: wrap;
@@ -466,6 +492,10 @@ button.primary,
 
 .price-grid-three {
   grid-template-columns: repeat(3, 1fr);
+}
+
+.price-grid-four {
+  grid-template-columns: repeat(4, 1fr);
 }
 
 .pricing-note {
@@ -689,6 +719,12 @@ textarea {
   box-shadow: 0 18px 48px rgba(140, 74, 50, 0.14);
 }
 
+@media (max-width: 1040px) {
+  .price-grid-four {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 860px) {
   .topbar,
   .hero-shell,
@@ -740,9 +776,11 @@ textarea {
   .grid,
   .price-grid,
   .price-grid-three,
+  .price-grid-four,
   .steps,
   .process-grid,
   .process-grid-four,
+  .service-detail-grid,
   .booking-form {
     grid-template-columns: 1fr;
   }
