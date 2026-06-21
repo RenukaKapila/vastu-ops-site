@@ -130,7 +130,7 @@ function syncConsultationType() {
     type.value = requiredType;
   }
   note.textContent = selected === "Numerology"
-    ? "Numerology is available online for $150."
+    ? "Numerology is available online for $50."
     : "Remedies are guided by the consultation.";
 }
 
