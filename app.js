@@ -27,6 +27,8 @@ const chaldeanMap = Object.fromEntries(
   )
 );
 
+let publicSupabaseClient = null;
+
 function reduceNumber(value) {
   let number = value;
   while (number > 9) {
@@ -46,27 +48,19 @@ function scoreText(text) {
 }
 
 function isSupabaseReady() {
-  return Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
+  return Boolean(SUPABASE_URL && SUPABASE_ANON_KEY && window.supabase);
 }
 
-function supabaseRestUrl() {
-  return SUPABASE_URL.endsWith("/rest/v1")
-    ? SUPABASE_URL
-    : `${SUPABASE_URL}/rest/v1`;
-}
-
-function supabaseHeaders() {
-  const headers = {
-    apikey: SUPABASE_ANON_KEY,
-    "Content-Type": "application/json",
-    Prefer: "return=minimal"
-  };
-
-  if (!SUPABASE_ANON_KEY.startsWith("sb_publishable_")) {
-    headers.Authorization = `Bearer ${SUPABASE_ANON_KEY}`;
+function getSupabaseClient() {
+  if (!isSupabaseReady()) {
+    throw new Error("Online saving is not connected yet.");
   }
 
-  return headers;
+  if (!publicSupabaseClient) {
+    publicSupabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  }
+
+  return publicSupabaseClient;
 }
 
 function bookingFallbackUrl(payload) {
@@ -96,23 +90,17 @@ function showBookingFallback(status, payload, message) {
 }
 
 async function saveInquiry(payload) {
-  if (!isSupabaseReady()) {
-    throw new Error("Online saving is not connected yet.");
-  }
-
-  let response;
+  let result;
   try {
-    response = await fetch(`${supabaseRestUrl()}/inquiries`, {
-      method: "POST",
-      headers: supabaseHeaders(),
-      body: JSON.stringify(payload)
-    });
+    result = await getSupabaseClient()
+      .from("inquiries")
+      .insert(payload);
   } catch {
     throw new Error(BOOKING_NETWORK_ERROR);
   }
 
-  if (!response.ok) {
-    throw new Error("Request could not be saved.");
+  if (result.error) {
+    throw new Error(result.error.message || "Request could not be saved.");
   }
 }
 
